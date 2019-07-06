@@ -6,7 +6,23 @@
     "build": "node lambdaBuild.js",
     "format": "prettier --config .prettierrc --write '{lambda,libs}/**/*.{ts,js}'"
   },
-  "author": "TakuKobayashi",
+  "author": "TakuKobayashi <keep_slimbody@yahoo.co.jp>",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "documentation": "^11.0.1",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "@octokit/rest": "^16.28.2",
+    "app-root-path": "^2.2.1",
+    "axios": "^0.19.0",
+    "gitlab": "^6.3.7",
+    "googleapis": "^40.0.0"
+  }
 }
