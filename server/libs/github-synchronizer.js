@@ -1,7 +1,7 @@
 const Octokit = require('@octokit/rest')
 
 //TODO あとでTypeScriptで書き直す
-exports.GithubUploader = class GithubUploader {
+exports.GithubSynchronizer = class GithubSynchronizer {
   constructor(accessToken){
     this.octokit = new Octokit({auth: accessToken});
   }
@@ -39,6 +39,6 @@ exports.GithubUploader = class GithubUploader {
     if(uploadFileImfo.branchName){
       commitInfo.branch = uploadFileImfo.branchName;
     }
-    await octokit.repos.createOrUpdateFile(commitInfo)
+    await this.octokit.repos.createOrUpdateFile(commitInfo)
   }
 }
