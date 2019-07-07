@@ -21,11 +21,14 @@ toMailInfo: {
 exports.sendGmail = async function sendGmail(credentials, toMailInfo = {}) {
   const oauth2Client = new google.auth.OAuth2(process.env.GOOGLE_OAUTH_CLIENT_ID, process.env.GOOGLE_OAUTH_CLIENT_SECRET);
   oauth2Client.setCredentials(credentials);
+  const toName = toMailInfo.toName || toMailInfo.toMailAdress;
+  const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+  const userAccountResponse = await gmail.users.getProfile({userId: "me"})
   const mimeVersion = toMailInfo.mimeVersion || '1.0';
   const contentType = toMailInfo.contentType || 'text/html; charset=utf-8';
   const messageArr = [
-    ['From:', toMailInfo.toName, toMailInfo.toMailAdress].join(' '),
-    ['To:', toMailInfo.toName, toMailInfo.toMailAdress].join(' '),
+    ['From:', userAccountResponse.data.emailAddress, ["<", userAccountResponse.data.emailAddress, ">"].join("")].join(' '),
+    ['To:', toName, ["<", toMailInfo.toMailAdress, ">"].join("")].join(' '),
     ['Content-Type:', contentType].join(' '),
     ['MIME-Version:', mimeVersion].join(' '),
     ['Subject:', toMailInfo.subject].join(' '),
