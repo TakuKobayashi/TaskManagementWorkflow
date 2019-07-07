@@ -1,7 +1,7 @@
 const Octokit = require('@octokit/rest')
 
 //TODO あとでTypeScriptで書き直す
-exports.GithubManager = class GithubManager {
+exports.GithubUploader = class GithubUploader {
   constructor(accessToken){
     this.octokit = new Octokit({auth: accessToken});
   }
