@@ -24,3 +24,12 @@ yarn-debug.log*
 yarn-error.log*
 
 .gitconfig
+
+# package directories
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
