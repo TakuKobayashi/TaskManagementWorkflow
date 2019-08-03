@@ -191,4 +191,8 @@ jspm_packages
 # Webpack directories
 .webpack
 
+## Compiled JavaScript files
+**/*.js
+**/*.js.map
+
 # End of https://www.gitignore.io/api/node,webstorm
