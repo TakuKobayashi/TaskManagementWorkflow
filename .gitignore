@@ -195,4 +195,12 @@ jspm_packages
 **/*.js
 **/*.js.map
 
-# End of https://www.gitignore.io/api/node,webstorm
+### Firebase ###
+.idea
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
+
+# End of https://www.gitignore.io/api/node,webstorm,firebase
