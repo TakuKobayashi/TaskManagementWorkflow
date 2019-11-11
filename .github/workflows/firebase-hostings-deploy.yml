@@ -23,18 +23,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: yarn install
-        working-directory: ./task-management-workflow
+        working-directory: ./frontend
         run: |
           yarn install
       - name: yarn build
-        working-directory: ./task-management-workflow
+        working-directory: ./frontend
         run: |
           yarn run build
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
           name: hosting-build
-          path: ./task-management-workflow/build
+          path: ./frontend/build
   deploy:
     name: Deploy
     needs: build
@@ -46,13 +46,13 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: hosting-build
-      - name: copy hosting-build to task-management-workflow/public
+      - name: copy hosting-build to frontend/public
         run: |
-          mv -f ./hosting-build/* ./task-management-workflow/public/
+          mv -f ./hosting-build/* ./frontend/public/
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_PATH: ./task-management-workflow
+          PROJECT_PATH: ./frontend
