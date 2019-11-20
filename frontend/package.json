@@ -76,7 +76,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "format": "prettier --config .prettierrc --write '{src,config,public,scripts}/**/*.{ts,js}'"
+    "format": "prettier --config .prettierrc --write '{src,config,public,scripts}/**/*.{ts,js,tsx}'"
   },
   "eslintConfig": {
     "extends": "react-app"
