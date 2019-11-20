@@ -7,6 +7,9 @@ import googlelogo from './images/google.png';
 
 import './css/style.css';
 
+import { VisualPicker, VisualPickerOption } from 'react-rainbow-components';
+import { SidebarCompoment } from './compoments/SidebarCompoment'
+
 class App extends React.Component {
   constructor(props: any) {
     super(props);
