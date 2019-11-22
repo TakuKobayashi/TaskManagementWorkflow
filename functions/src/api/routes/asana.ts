@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
 const express = require('express');
-const router = express.Router();
+const asanaRouter = express.Router();
 
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
+asanaRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('hello asana');
 });
 
-router.post('/webhook', (req: Request, res: Response, next: NextFunction) => {
+asanaRouter.post('/webhook', (req: Request, res: Response, next: NextFunction) => {
   const hookSecret = req.headers['x-hook-secret'];
   console.log(hookSecret);
   if (hookSecret) {
@@ -19,4 +19,4 @@ router.post('/webhook', (req: Request, res: Response, next: NextFunction) => {
   res.json(req.body);
 });
 
-export { router };
+export { asanaRouter };

@@ -1,13 +1,17 @@
 import { region } from 'firebase-functions';
 import * as express from 'express';
-import { router } from './api/routes/asana';
+import { asanaRouter } from './api/routes/asana';
+import { githubRouter } from './api/routes/github';
+import { googleRouter } from './api/routes/google';
 
 const app = express();
 const cors = require('cors');
 
 app.use(cors({ origin: true }));
 
-app.use('/asana', router);
+app.use('/asana', asanaRouter);
+app.use('/google', googleRouter);
+app.use('/github', githubRouter);
 
 app.get('/', (req, res) => {
   res.json({ hello: 'world' });

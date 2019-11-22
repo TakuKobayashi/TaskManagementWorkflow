@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 const express = require('express');
-const router = express.Router();
+const githubRouter = express.Router();
 
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
+githubRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('hello github');
 });
 
-export { router };
+export { githubRouter };
