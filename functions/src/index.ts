@@ -1,4 +1,4 @@
-import { region } from 'firebase-functions';
+import { region, config } from 'firebase-functions';
 import * as express from 'express';
 import { asanaRouter } from './api/routes/asana';
 import { githubRouter } from './api/routes/github';
@@ -6,15 +6,19 @@ import { googleRouter } from './api/routes/google';
 import { authRouter } from './api/routes/auth';
 import { trelloRouter } from './api/routes/trello';
 
-import { initFirestore } from './libs/load-firestore';
+import * as admin from 'firebase-admin';
 
 require('dotenv').config();
+
+const fs = require('fs');
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 
-const firestore = initFirestore();
+admin.initializeApp(config().firebase);
+const firestore = admin.firestore();
+const storage = admin.storage();
 const app = express();
 const cors = require('cors');
 
@@ -99,6 +103,19 @@ app.get('/inputData', (req, res) => {
   });
   res.json(setAda);
 });
+
+app.get('/uploadStorage', (req,res) => {
+
+    const new_file   = storage.bucket().file('image.png');
+    const blobStream = new_file.createWriteStream({
+        metadata:{
+            contentType: "image/png",
+        }
+    });
+    blobStream.end(fs.readFileSync("/Users/kobayashi/workspace/project/TaskManagementWorkflow/ag2wlogo.png"), () => {
+      res.json({ hello: 'world' });
+    });
+})
 
 export const api = region('asia-northeast1').https.onRequest(app);
 
