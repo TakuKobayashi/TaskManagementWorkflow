@@ -3,16 +3,20 @@ import * as express from 'express';
 import { asanaRouter } from './api/routes/asana';
 import { githubRouter } from './api/routes/github';
 import { googleRouter } from './api/routes/google';
+import { authRouter } from './api/routes/auth';
 
 import { initFirestore } from './libs/load-firestore';
 
+const passport = require('passport');
 const firestore = initFirestore();
 
 const app = express();
 const cors = require('cors');
 
+app.use(passport.initialize());
 app.use(cors({ origin: true }));
 
+app.use('/auth', authRouter);
 app.use('/asana', asanaRouter);
 app.use('/google', googleRouter);
 app.use('/github', githubRouter);
