@@ -4,6 +4,7 @@ import { asanaRouter } from './api/routes/asana';
 import { githubRouter } from './api/routes/github';
 import { googleRouter } from './api/routes/google';
 import { authRouter } from './api/routes/auth';
+import { trelloRouter } from './api/routes/trello';
 
 import { initFirestore } from './libs/load-firestore';
 
@@ -72,6 +73,7 @@ app.use('/auth', authRouter);
 app.use('/asana', asanaRouter);
 app.use('/google', googleRouter);
 app.use('/github', githubRouter);
+app.use('/trello', trelloRouter);
 
 app.get('/', (req, res) => {
   res.json({ hello: 'world' });

@@ -28,8 +28,10 @@
     "gitlab": "^10.0.1",
     "googleapis": "^45.0.0",
     "passport": "^0.4.0",
+    "passport-asana": "^0.0.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth": "^2.0.0",
+    "passport-trello": "^0.1.5",
     "source-map-support": "^0.5.13"
   },
   "devDependencies": {
