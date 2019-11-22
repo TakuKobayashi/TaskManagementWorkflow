@@ -11,6 +11,7 @@ require('dotenv').config();
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
 
 const firestore = initFirestore();
 const app = express();
@@ -33,6 +34,26 @@ passport.use(
         profile: profile,
       });
       cb(undefined, googleToken);
+    },
+  ),
+);
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: '/ag2w-245905/asia-northeast1/api/github/callback',
+    },
+    (accessToken: string, refreshToken: string, profile: any, cb: any) => {
+      console.log({ accessToken, refreshToken, profile, cb });
+      const githubDocRef = firestore.collection('github-users').doc(profile.id);
+      const githubToken = githubDocRef.set({
+        accessToken: accessToken,
+        refreshToken: refreshToken || '',
+        profile: profile,
+      });
+      cb(undefined, githubToken);
     },
   ),
 );

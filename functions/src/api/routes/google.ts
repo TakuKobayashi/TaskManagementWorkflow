@@ -10,7 +10,7 @@ googleRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
 
 googleRouter.get('/auth', passport.authenticate('google', { scope: ['email', 'profile'], session: false, accessType: 'offline' }));
 
-googleRouter.get('/callback', passport.authenticate('google'), (req: any, res: any, next: any) => {
+googleRouter.get('/callback', passport.authenticate('google'), (req: Request, res: Response, next: NextFunction) => {
   res.redirect('/');
 });
 
