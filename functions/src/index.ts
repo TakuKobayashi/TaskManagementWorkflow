@@ -31,14 +31,15 @@ passport.use(
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
       callbackURL: '/ag2w-245905/asia-northeast1/api/google/callback',
     },
-    (accessToken: string, refreshToken: string, profile: any, cb: any) => {
+    async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
       const googleDocRef = firestore.collection('google-users').doc(profile.id);
-      const googleToken = googleDocRef.set({
+      const account = {
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
-      });
-      cb(undefined, googleToken);
+      };
+      await googleDocRef.set(account).catch(err => console.log(err));
+      cb(undefined, account);
     },
   ),
 );
@@ -50,15 +51,15 @@ passport.use(
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: '/ag2w-245905/asia-northeast1/api/github/callback',
     },
-    (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-      console.log({ accessToken, refreshToken, profile, cb });
+    async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
       const githubDocRef = firestore.collection('github-users').doc(profile.id);
-      const githubToken = githubDocRef.set({
+      const account = {
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
-      });
-      cb(undefined, githubToken);
+      };
+      await githubDocRef.set(account).catch(err => console.log(err));
+      cb(undefined, account);
     },
   ),
 );
@@ -86,17 +87,17 @@ app.get('/', (req, res) => {
 app.get('/getData', async (req, res) => {
   const users = await firestore.collection('users').get();
   const results: FirebaseFirestore.DocumentData[] = [];
-  users.forEach((doc: FirebaseFirestore.DocumentData) => {
+  for (const doc of users.docs) {
     console.log(doc.id, '=>', doc.data());
     results.push(doc.data());
-  });
+  }
   res.json(results);
 });
 
-app.get('/inputData', (req, res) => {
+app.get('/inputData', async (req, res) => {
   // collectionがデータのリスト(row) docがキー(Id)で中身がカラム(JSON)
   const docRef = firestore.collection('users').doc('alovelace');
-  const setAda = docRef.set({
+  const setAda = await docRef.set({
     first: 'Ada',
     last: 'Lovelace',
     born: 1815,
@@ -104,18 +105,17 @@ app.get('/inputData', (req, res) => {
   res.json(setAda);
 });
 
-app.get('/uploadStorage', (req,res) => {
-
-    const new_file   = storage.bucket().file('image.png');
-    const blobStream = new_file.createWriteStream({
-        metadata:{
-            contentType: "image/png",
-        }
-    });
-    blobStream.end(fs.readFileSync("/Users/kobayashi/workspace/project/TaskManagementWorkflow/ag2wlogo.png"), () => {
-      res.json({ hello: 'world' });
-    });
-})
+app.get('/uploadStorage', (req, res) => {
+  const new_file = storage.bucket().file('image.png');
+  const blobStream = new_file.createWriteStream({
+    metadata: {
+      contentType: 'image/png',
+    },
+  });
+  blobStream.end(fs.readFileSync('/Users/kobayashi/workspace/project/TaskManagementWorkflow/ag2wlogo.png'), () => {
+    res.json({ hello: 'world' });
+  });
+});
 
 export const api = region('asia-northeast1').https.onRequest(app);
 
