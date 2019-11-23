@@ -24,6 +24,24 @@ jobs:
         working-directory: ./functions
         run: |
           yarn install
+      - name: Register .env
+        working-directory: ./functions
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          ASANA_CLIENT_ID: ${{ secrets.ASANA_CLIENT_ID }}
+          ASANA_CLIENT_SECRET: ${{ secrets.ASANA_CLIENT_SECRET }}
+        run: |
+          echo "GOOGLE_API_KEY=${GOOGLE_API_KEY}" >> ./.env
+          echo "GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID}" >> ./.env
+          echo "GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET}" >> ./.env
+          echo "GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}" >> ./.env
+          echo "GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}" >> ./.env
+          echo "ASANA_CLIENT_ID=${ASANA_CLIENT_ID}" >> ./.env
+          echo "ASANA_CLIENT_SECRET=${ASANA_CLIENT_SECRET}" >> ./.env
       - name: yarn build
         working-directory: ./functions
         run: |
@@ -34,7 +52,7 @@ jobs:
           args: deploy --only functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_PATH: ./
+          PROJECT_PATH: ./functions
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
