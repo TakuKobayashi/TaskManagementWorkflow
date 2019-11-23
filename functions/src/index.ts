@@ -15,6 +15,7 @@ const fs = require('fs');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
+const AsanaStrategy = require('passport-asana').Strategy;
 
 admin.initializeApp(config().firebase);
 const firestore = admin.firestore();
@@ -32,13 +33,13 @@ passport.use(
       callbackURL: '/ag2w-245905/asia-northeast1/api/google/callback',
     },
     async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-      const googleDocRef = firestore.collection('google-users').doc(profile.id);
       const account = {
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
       };
-      await googleDocRef.set(account).catch(err => console.log(err));
+      const googleDocRef = firestore.collection('google-users').doc(profile.id);
+      await googleDocRef.set(account).catch((err) => console.log(err));
       cb(undefined, account);
     },
   ),
@@ -52,13 +53,34 @@ passport.use(
       callbackURL: '/ag2w-245905/asia-northeast1/api/github/callback',
     },
     async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-      const githubDocRef = firestore.collection('github-users').doc(profile.id);
       const account = {
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
       };
-      await githubDocRef.set(account).catch(err => console.log(err));
+      const githubDocRef = firestore.collection('github-users').doc(profile.id);
+      await githubDocRef.set(account).catch((err) => console.log(err));
+      cb(undefined, account);
+    },
+  ),
+);
+
+passport.use(
+  'Asana',
+  new AsanaStrategy(
+    {
+      clientID: process.env.ASANA_CLIENT_ID,
+      clientSecret: process.env.ASANA_CLIENT_SECRET,
+      callbackURL: '/ag2w-245905/asia-northeast1/api/asana/callback',
+    },
+    async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
+      const account = {
+        accessToken: accessToken,
+        refreshToken: refreshToken || '',
+        profile: profile,
+      };
+      const asanaDocRef = firestore.collection('asana-users').doc(profile.id);
+      await asanaDocRef.set(account).catch((err) => console.log(err));
       cb(undefined, account);
     },
   ),
