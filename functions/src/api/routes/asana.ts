@@ -38,7 +38,7 @@ asanaRouter.post('/registWebhook', async (req: Request, res: Response, next: Nex
   const projectId: string = req.query('projectId') || '';
   const client = Asana.Client.create().useAccessToken(asanaAccessToken);
   // 一番最後に {opt_fields: []} コレを追加するとWebhookの時に付け加えるパラメータを増やすことができる https://developers.asana.com/docs/#establish-a-webhook
-  const webhook = await client.webhooks.create(projectId, 'https://8301607d.ngrok.io/ag2w-245905/asia-northeast1/api/asana/webhook');
+  const webhook = await client.webhooks.create(projectId, 'https://asia-northeast1-ag2w-245905.cloudfunctions.net/api/asana/webhook');
   res.json(webhook);
 });
 
