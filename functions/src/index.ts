@@ -5,6 +5,7 @@ import { githubRouter } from './api/routes/github';
 import { googleRouter } from './api/routes/google';
 import { authRouter } from './api/routes/auth';
 import { trelloRouter } from './api/routes/trello';
+import { teamsRouter } from './api/routes/teams';
 
 import * as admin from 'firebase-admin';
 
@@ -16,12 +17,19 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const AsanaStrategy = require('passport-asana').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 
 admin.initializeApp(config().firebase);
 const firestore = admin.firestore();
 const storage = admin.storage();
 const app = express();
 const cors = require('cors');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use(passport.initialize());
 
@@ -34,6 +42,7 @@ passport.use(
     },
     async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
       const account = {
+        id: profile.id,
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
@@ -54,6 +63,7 @@ passport.use(
     },
     async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
       const account = {
+        id: profile.id,
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
@@ -75,6 +85,7 @@ passport.use(
     },
     async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
       const account = {
+        id: profile.id,
         accessToken: accessToken,
         refreshToken: refreshToken || '',
         profile: profile,
@@ -84,6 +95,18 @@ passport.use(
       cb(undefined, account);
     },
   ),
+);
+
+passport.use(
+  new LocalStrategy((email: string, password: string, done: any) => {
+    const userAccount = {
+      email: email,
+      password: password,
+    };
+    console.log(userAccount);
+
+    done(null, true);
+  }),
 );
 
 passport.serializeUser(function(user: any, done: any) {
@@ -101,6 +124,7 @@ app.use('/asana', asanaRouter);
 app.use('/google', googleRouter);
 app.use('/github', githubRouter);
 app.use('/trello', trelloRouter);
+app.use('/teams', teamsRouter);
 
 app.get('/', (req, res) => {
   res.json({ hello: 'world' });
