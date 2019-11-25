@@ -13,6 +13,16 @@ import { SidebarCompoment } from './compoments/SidebarCompoment'
 class App extends React.Component {
   constructor(props: any) {
     super(props);
+    this.onOpenAuthWindow = this.onOpenAuthWindow.bind(this);
+  }
+
+  onOpenAuthWindow(event: any){
+    const screen = window.screen;
+    const windowLogin = window.open("http://localhost:5000/ag2w-245905/asia-northeast1/api/google/auth", "_blank", "width=" + (screen.width / 2) + ",height=" + (screen.height / 2));
+    if(!windowLogin){
+      windowLogin!.focus();
+    }
+    event.preventDefault();
   }
 
   render():
@@ -35,7 +45,7 @@ class App extends React.Component {
         <div className="threeCol">
           <div className="inner">
             <div className="image zoom">
-              <img src={asanalogo} alt="ASANA" />
+              <a onClick={(e) => this.onOpenAuthWindow(e)}><img src={asanalogo} alt="ASANA" /></a>
             </div>
             <div className="center">
               <h4>ASANA</h4>
